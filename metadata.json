@@ -1,0 +1,5 @@
+{
+  "name": "WuidTunnel",
+  "description": "AI-powered GUI Automation Testing Tool based on Rust and Tauri architecture concepts.",
+  "requestFramePermissions": []
+}
