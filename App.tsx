@@ -7,6 +7,7 @@ import { TestCreator } from './pages/TestCreator';
 import { ExecutionCenter } from './pages/ExecutionCenter';
 import { Configuration } from './pages/Configuration';
 import { SystemValidation } from './pages/SystemValidation';
+import { ScriptPlayground } from './pages/ScriptPlayground';
 import { AppStateProvider } from './context/AppStateContext';
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
             <Route path="/test-cases" element={<TestCaseManager />} />
             <Route path="/create-test-case" element={<TestCreator />} />
             <Route path="/execution" element={<ExecutionCenter />} />
+            <Route path="/playground" element={<ScriptPlayground />} />
             <Route path="/config" element={<Configuration />} />
             <Route path="/system-check" element={<SystemValidation />} />
             <Route path="/guide" element={<div className="p-8 text-center text-gray-500">用户指南模块开发中...</div>} />

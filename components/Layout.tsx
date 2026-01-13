@@ -12,7 +12,8 @@ import {
   LogOut, 
   BookOpen,
   MonitorPlay,
-  PlusCircle
+  PlusCircle,
+  Code
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -81,6 +82,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               icon={PlayCircle} 
               label="执行中心" 
               active={location.pathname === '/execution'} 
+            />
+            <SidebarItem 
+              to="/playground" 
+              icon={Code} 
+              label="测试脚本PlayGround" 
+              active={location.pathname === '/playground'} 
             />
             <SidebarItem 
               to="/config" 

@@ -67,13 +67,23 @@ const MockElement: React.FC<MockElementProps> = ({ selector, type, children, cla
     if (isSpying) { onRecord('spy', selector); return; }
     if (isRecording) {
       if (type === 'input') {
-         const val = prompt(`Enter value for ${selector}:`, 'test-value');
-         if (val !== null) onRecord('input', selector, val);
+         // Intentionally left empty to allow natural interaction (focus & typing).
+         // Recording is handled via onBlur or key events (like Enter).
       } else if (type === 'text') {
          onRecord('verify', selector, children?.toString() || '');
       } else {
          onRecord('click', selector);
       }
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent) => {
+    if (isRecording && type === 'input') {
+        const target = e.target as HTMLInputElement;
+        // Capture input value when user clicks away
+        if (target && target.value) {
+            onRecord('input', selector, target.value);
+        }
     }
   };
 
@@ -87,6 +97,7 @@ const MockElement: React.FC<MockElementProps> = ({ selector, type, children, cla
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
+      onBlur={handleBlur}
       title={selector}
     >
        {children}
@@ -599,10 +610,12 @@ export const TestCreator: React.FC = () => {
                 - **Text Content**: Action='verify', Value='Expected Text'. (e.g. "Welcome, User")
                 - **Visibility**: Action='verify', Value='visible' or 'hidden'. (e.g. "Dialog should appear")
                 - **State/Attribute**: Action='verify', Value='enabled', 'disabled', 'checked'.
-             3. **Complex Logic**:
-                - Use 'condition' only when the flow has branching paths (e.g., "If popup exists, close it").
-                - Use 'loop' when processing dynamic lists of items (e.g., "Delete all todo items").
-             4. **Wait Strategies**: implicit waits are preferred, but use explicit 'wait' actions for anticipated async operations (spinners, animations).
+             3. **Conditional Logic (Critical)**:
+                - **If/Else**: Use 'condition' action when checking for element existence/state before proceeding.
+                - **Scenario**: "If popup exists, close it" => Action='condition', Selector='.popup', TrueSteps=[Click Close].
+                - **Scenario**: "If not logged in, login" => Action='condition', Selector='#login-form', TrueSteps=[Login Steps].
+             4. **Loops**: Use 'loop' when processing dynamic lists of items (e.g., "Delete all todo items").
+             5. **Wait Strategies**: implicit waits are preferred, but use explicit 'wait' actions for anticipated async operations (spinners, animations).
 
              Output Schema (JSON):
              {
